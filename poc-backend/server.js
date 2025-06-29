@@ -68,6 +68,16 @@ app.get('/api/test-db', async (req, res) => {
   }
 });
 
+// Importando as rotas
+const categoriasRoutes = require('./routes/categorias');
+const investimentosRoutes = require('./routes/investimentos');
+const aportesRoutes = require('./routes/aportes');
+
+// Usando as rotas
+app.use('/api/categorias', categoriasRoutes);
+app.use('/api/investimentos', investimentosRoutes);
+app.use('/api/aportes', aportesRoutes);
+
 // Inicialização do servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);

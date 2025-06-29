@@ -1,45 +1,19 @@
-.App {
-  text-align: center;
+/* Reset e base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: #1a1a1a;
+  color: #e0e0e0;
 }
 
 .app {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1a1a;
   padding: 20px;
 }
 
@@ -49,130 +23,394 @@
 }
 
 .header {
-  text-align: center;
-  margin-bottom: 3rem;
-  color: white;
+  text-align: left;
+  margin-bottom: 2rem;
+  color: #e0e0e0;
 }
 
 .header h1 {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   margin-bottom: 0.5rem;
-  font-weight: bold;
+  font-weight: 400;
+  color: #ffffff;
 }
 
-.header p {
-  font-size: 1.2rem;
-  opacity: 0.9;
+/* Main Content */
+.main-content {
+  position: relative;
+  background: transparent;
 }
 
-.status-grid {
+/* Investments Grid */
+.investments-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
-.status-card {
-  background: white;
+.investment-card {
+  background: #333333;
+  border-radius: 12px;
   padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid;
+  border: 1px solid #4a4a4a;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
-.status-card.green {
-  border-left-color: #10b981;
+.investment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  border-color: #5a5a5a;
 }
 
-.status-card.blue {
-  border-left-color: #3b82f6;
+.card-content {
+  margin-bottom: 1.5rem;
 }
 
-.status-card.purple {
-  border-left-color: #8b5cf6;
-}
-
-.status-card.yellow {
-  border-left-color: #f59e0b;
-}
-
-.status-card h3 {
-  margin: 0 0 0.5rem 0;
+.investment-title {
+  color: #ffffff;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #374151;
-}
-
-.status-card p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #6b7280;
-}
-
-.features-section {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 3rem;
-}
-
-.features-section h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: #374151;
-  font-weight: bold;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.features-grid h3 {
-  font-size: 1.2rem;
   margin-bottom: 1rem;
-  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.investment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-item .label {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.info-item .value {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Valor específico em destaque */
+.info-item:first-child .value {
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-card {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-details {
+  background: transparent;
+  color: #a0a0a0;
+  border: 1px solid #4a4a4a;
+}
+
+.btn-details:hover {
+  background: #4a4a4a;
+  color: #ffffff;
+}
+
+.btn-invest {
+  background: #ffd700;
+  color: #1a1a1a;
+  border: 1px solid #ffd700;
+}
+
+.btn-invest:hover {
+  background: #ffed4e;
+  transform: translateY(-1px);
+}
+
+/* Card Novo Investimento */
+.new-investment-card {
+  cursor: pointer;
+  border: 2px dashed #4a4a4a !important;
+  background: #333333 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+.new-investment-card:hover {
+  border-color: #ffd700 !important;
+  background: rgba(255, 215, 0, 0.05) !important;
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+.new-investment-content {
+  text-align: center;
+  color: #a0a0a0;
+}
+
+.new-investment-card:hover .new-investment-content {
+  color: #ffd700;
+}
+
+.plus-icon {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.new-investment-card:hover .plus-icon {
+  transform: scale(1.1);
+}
+
+.new-investment-title {
+  color: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.no-investments-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  color: #a0a0a0;
+  margin-top: 1rem;
+}
+
+/* Estados especiais */
+.no-investments {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #a0a0a0;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #a0a0a0;
+}
+
+/* Main Content */
+.main-content {
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Formulários */
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #333333;
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid #4a4a4a;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
-.features-grid ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.features-grid li {
-  padding: 0.5rem 0;
-  color: #6b7280;
-}
-
-.getting-started {
-  background: #f9fafb;
-  padding: 2rem;
-  border-radius: 10px;
-}
-
-.getting-started h2 {
-  font-size: 1.8rem;
+.investment-info {
+  background: #2a2a2a;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #ffd700;
   margin-bottom: 1rem;
-  color: #374151;
-  font-weight: bold;
 }
 
-.getting-started p {
-  margin-bottom: 1rem;
-  color: #4b5563;
-  line-height: 1.6;
+.investment-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #ffd700;
+  font-size: 1.1rem;
 }
 
-.getting-started code {
-  background: #e5e7eb;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+.investment-info p {
+  margin: 0.25rem 0;
+  color: #e0e0e0;
   font-size: 0.9rem;
+}
+
+.investment-form,
+.aporte-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.75rem;
+  border: 1px solid #4a4a4a;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #2a2a2a;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+.form-group input.error,
+.form-group select.error {
+  border-color: #ff6b6b;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.helper-text {
+  color: #ffd700;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.taxa-fields {
+  background: #2a2a2a;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #4a4a4a;
+}
+
+.aporte-summary {
+  background: #2a2a2a;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #4a4a4a;
+}
+
+.aporte-summary h4 {
+  margin: 0 0 1rem 0;
+  color: #ffd700;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.summary-item.total {
+  border-top: 2px solid #ffd700;
+  padding-top: 0.5rem;
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #ffd700;
+  color: #1a1a1a;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #ffed4e;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #a0a0a0;
+  border: 1px solid #4a4a4a;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #4a4a4a;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: #ff6b6b;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #ff5252;
+  transform: translateY(-1px);
 }
 
 /* Responsividade */
@@ -182,14 +420,45 @@
   }
   
   .header h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
   
-  .status-grid {
+  .investments-grid {
     grid-template-columns: 1fr;
   }
   
-  .features-grid {
-    grid-template-columns: 1fr;
+  .investment-card {
+    margin-bottom: 1rem;
+  }
+  
+  .card-actions {
+    flex-direction: column;
+  }
+  
+  .new-investment-card {
+    min-height: 150px;
+  }
+  
+  .plus-icon {
+    font-size: 2.5rem;
+  }
+  
+  .new-investment-title {
+    font-size: 1rem;
+  }
+  
+  .form-container {
+    margin: 0 1rem;
+    padding: 1.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions .btn {
+    width: 100%;
   }
 }
+
+
