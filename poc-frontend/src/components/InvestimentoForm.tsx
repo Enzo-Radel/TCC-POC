@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { 
+  InvestimentoFormProps, 
+  InvestimentoFormData, 
+  Categoria, 
+  ApiResponse, 
+  FormErrors,
+  FormChangeEvent,
+  FormSubmitEvent
+} from '../types';
 
-const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
-  const [formData, setFormData] = useState({
+const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuccess, onCancel }) => {
+  const [formData, setFormData] = useState<InvestimentoFormData>({
     titulo: '',
     data_vencimento: '',
     tipo_taxa_juros: 'porcentagem',
@@ -10,35 +19,35 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
     porcentagem_do_indice: '',
     categoria_id: ''
   });
-  const [categorias, setCategorias] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<FormErrors>({});
 
-  const isEditing = !!investimento;
+  const isEditing: boolean = !!investimento;
 
   useEffect(() => {
     fetchCategorias();
     
     if (investimento) {
       setFormData({
-        titulo: investimento.titulo || '',
-        data_vencimento: investimento.data_vencimento ? 
-          new Date(investimento.data_vencimento).toISOString().split('T')[0] : '',
-        tipo_taxa_juros: investimento.tipo_taxa_juros || 'porcentagem',
-        rentabilidade: investimento.rentabilidade || '',
-        indices: investimento.indices || '',
-        porcentagem_do_indice: investimento.porcentagem_do_indice || '',
-        categoria_id: investimento.categoria_id || ''
+        titulo: (investimento.titulo || '') as string,
+        data_vencimento: (investimento.data_vencimento ? 
+          new Date(investimento.data_vencimento).toISOString().split('T')[0] : '') as string,
+        tipo_taxa_juros: (investimento.tipo_taxa_juros || 'porcentagem') as 'porcentagem' | 'indice' | 'mista',
+        rentabilidade: (investimento.rentabilidade?.toString() || '') as string,
+        indices: (investimento.indices || '') as string,
+        porcentagem_do_indice: (investimento.porcentagem_do_indice?.toString() || '') as string,
+        categoria_id: (investimento.categoria_id?.toString() || '') as string
       });
     }
   }, [investimento]);
 
-  const fetchCategorias = async () => {
+  const fetchCategorias = async (): Promise<void> => {
     try {
       const response = await fetch('http://localhost:3001/api/categorias');
-      const data = await response.json();
+      const data: ApiResponse<Categoria[]> = await response.json();
       
-      if (data.success) {
+      if (data.success && data.data) {
         setCategorias(data.data);
       }
     } catch (error) {
@@ -46,7 +55,7 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: FormChangeEvent): void => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
@@ -56,8 +65,8 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
 
     if (!formData.titulo.trim()) {
       newErrors.titulo = 'Título é obrigatório';
@@ -91,7 +100,7 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormSubmitEvent): Promise<void> => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -102,7 +111,7 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
 
     try {
       const url = isEditing 
-        ? `http://localhost:3001/api/investimentos/${investimento.id}`
+        ? `http://localhost:3001/api/investimentos/${investimento?.id}`
         : 'http://localhost:3001/api/investimentos';
       
       const method = isEditing ? 'PUT' : 'POST';
@@ -112,10 +121,15 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          rentabilidade: formData.rentabilidade ? parseFloat(formData.rentabilidade) : undefined,
+          porcentagem_do_indice: formData.porcentagem_do_indice ? parseFloat(formData.porcentagem_do_indice) : undefined,
+          categoria_id: parseInt(formData.categoria_id, 10)
+        })
       });
 
-      const data = await response.json();
+      const data: ApiResponse = await response.json();
 
       if (data.success) {
         alert(data.message);
@@ -131,7 +145,7 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
     }
   };
 
-  const renderTaxaFields = () => {
+  const renderTaxaFields = (): JSX.Element => {
     const { tipo_taxa_juros } = formData;
 
     return (
@@ -199,7 +213,7 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
         <h2>{isEditing ? 'Editar Investimento' : 'Novo Investimento'}</h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="investment-form">
+      <form onSubmit={handleSubmit} className="investimento-form">
         <div className="form-group">
           <label>Título*</label>
           <input
@@ -208,6 +222,7 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
             value={formData.titulo}
             onChange={handleChange}
             className={errors.titulo ? 'error' : ''}
+            placeholder="Ex: CDB XYZ Bank"
           />
           {errors.titulo && <span className="error-message">{errors.titulo}</span>}
         </div>
@@ -223,21 +238,6 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
           />
           {errors.data_vencimento && <span className="error-message">{errors.data_vencimento}</span>}
         </div>
-
-        <div className="form-group">
-          <label>Tipo de Taxa de Juros*</label>
-          <select
-            name="tipo_taxa_juros"
-            value={formData.tipo_taxa_juros}
-            onChange={handleChange}
-          >
-            <option value="porcentagem">Porcentagem</option>
-            <option value="indice">Índice</option>
-            <option value="mista">Mista</option>
-          </select>
-        </div>
-
-        {renderTaxaFields()}
 
         <div className="form-group">
           <label>Categoria*</label>
@@ -257,19 +257,26 @@ const InvestimentoForm = ({ investimento, onSuccess, onCancel }) => {
           {errors.categoria_id && <span className="error-message">{errors.categoria_id}</span>}
         </div>
 
-        <div className="form-actions">
-          <button 
-            type="button" 
-            onClick={onCancel}
-            className="btn btn-secondary"
+        <div className="form-group">
+          <label>Tipo de Taxa de Juros*</label>
+          <select
+            name="tipo_taxa_juros"
+            value={formData.tipo_taxa_juros}
+            onChange={handleChange}
           >
+            <option value="porcentagem">Porcentagem Fixa</option>
+            <option value="indice">Vinculado a Índice</option>
+            <option value="mista">Mista (Porcentagem + Índice)</option>
+          </select>
+        </div>
+
+        {renderTaxaFields()}
+
+        <div className="form-actions">
+          <button type="button" onClick={onCancel} className="btn-secondary">
             Cancelar
           </button>
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="btn btn-primary"
-          >
+          <button type="submit" disabled={loading} className="btn-primary">
             {loading ? 'Salvando...' : (isEditing ? 'Atualizar' : 'Criar')}
           </button>
         </div>

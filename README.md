@@ -1,21 +1,34 @@
-# 🚀 POC - Ambiente de Desenvolvimento React + Node.js + MySQL
+# 🚀 POC - Ambiente de Desenvolvimento React + Node.js + MySQL (TypeScript)
 
-Este projeto é uma prova de conceito (POC) que demonstra um ambiente de desenvolvimento completo usando React, Node.js, MySQL e Tailwind CSS.
+Este projeto é uma prova de conceito (POC) que demonstra um ambiente de desenvolvimento completo usando React, Node.js, MySQL e Tailwind CSS. **O projeto foi convertido para TypeScript para melhor tipagem e experiência de desenvolvimento.**
 
 ## 📋 Tecnologias Utilizadas
 
-- **Frontend**: React 18 + Tailwind CSS
-- **Backend**: Node.js + Express.js
+- **Frontend**: React 18 + **TypeScript** + Tailwind CSS
+- **Backend**: Node.js + Express.js + **TypeScript**
 - **Banco de Dados**: MySQL 8.0
 - **Containerização**: Docker + Docker Compose
 - **Gerenciamento de Banco**: phpMyAdmin
+- **Tipagem**: TypeScript com strict mode habilitado
 
 ## 🏗️ Estrutura do Projeto
 
 ```
 poc/
-├── poc-frontend/          # Aplicação React
-├── poc-backend/           # API Node.js
+├── poc-frontend/          # Aplicação React TypeScript
+│   ├── src/
+│   │   ├── types/        # Definições de tipos TypeScript
+│   │   ├── components/   # Componentes React tipados
+│   │   └── App.tsx       # Componente principal
+│   └── tsconfig.json     # Configuração TypeScript
+├── poc-backend/           # API Node.js TypeScript
+│   ├── src/              # Código fonte TypeScript
+│   │   ├── types/        # Definições de tipos
+│   │   ├── models/       # Modelos tipados
+│   │   ├── controllers/  # Controllers tipados
+│   │   └── server.ts     # Servidor principal
+│   ├── dist/             # Código JavaScript compilado
+│   └── tsconfig.json     # Configuração TypeScript
 ├── database/              # Scripts SQL
 │   └── init.sql          # Inicialização do banco
 ├── docker-compose.yml     # Configuração Docker
@@ -82,6 +95,9 @@ docker-compose ps
 **Terminal 1 - Backend:**
 ```bash
 cd poc-backend
+# Compilar TypeScript
+npm run build
+# Executar em desenvolvimento com watch
 npm run dev
 ```
 
@@ -123,6 +139,31 @@ curl http://localhost:3001/api/test-db
 - **Componentes Modernos** com gradientes e shadows
 - **Monitoramento de Status** do backend em tempo real
 - **Interface Intuitiva** com cards informativos
+- **Tipagem TypeScript** para props e estados
+- **Componentes React.FC** tipados
+
+## 🔷 Recursos do TypeScript
+
+### Backend
+- **Modelos tipados** para todas as entidades
+- **Controllers com tipagem de Request/Response**
+- **DTOs para validação de entrada**
+- **Rotas tipadas** com parâmetros validados
+- **IntelliSense completo** durante desenvolvimento
+
+### Frontend  
+- **Componentes React totalmente tipados**
+- **Props interfaces** para todos os componentes
+- **Estados tipados** com useState
+- **Eventos de formulário tipados**
+- **API responses tipadas**
+
+### Benefícios da Conversão
+- 🛡️ **Detecção de erros** em tempo de compilação
+- 🚀 **Melhor experiência de desenvolvimento** com autocomplete
+- 📚 **Código autodocumentado** através dos tipos
+- 🔧 **Refatoração mais segura**
+- 🐛 **Redução significativa de bugs**
 
 ## 🗄️ Estrutura do Banco de Dados
 
@@ -154,11 +195,20 @@ docker-compose up -d --build
 
 ### Desenvolvimento
 ```bash
-# Backend em modo desenvolvimento
+# Backend - Compilar TypeScript
+cd poc-backend && npm run build
+
+# Backend em modo desenvolvimento (com watch)
 cd poc-backend && npm run dev
 
 # Frontend em modo desenvolvimento
 cd poc-frontend && npm start
+
+# Verificar tipos TypeScript (backend)
+cd poc-backend && npx tsc --noEmit
+
+# Verificar tipos TypeScript (frontend)
+cd poc-frontend && npx tsc --noEmit
 
 # Instalar nova dependência no backend
 cd poc-backend && npm install nome-da-dependencia
