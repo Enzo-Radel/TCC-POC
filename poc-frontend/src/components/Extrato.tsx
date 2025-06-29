@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ExtratoProps, Movimentacao, AporteCompleto, RetiradaCompleta, ApiResponse } from '../types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faArrowTrendUp, 
+  faArrowTrendDown, 
+  faPlus, 
+  faMinus, 
+  faTrash 
+} from '@fortawesome/free-solid-svg-icons';
+import { ExtratoProps, Movimentacao, ApiResponse } from '../types';
 
 const Extrato: React.FC<ExtratoProps> = ({ investimento, onBack, onAddAporte, onAddRetirada }) => {
   const [movimentacoes, setMovimentacoes] = useState<Movimentacao[]>([]);
@@ -106,8 +114,10 @@ const Extrato: React.FC<ExtratoProps> = ({ investimento, onBack, onAddAporte, on
     }).format(safeValue);
   };
 
-  const getTipoIcon = (tipo: 'aporte' | 'retirada'): string => {
-    return tipo === 'aporte' ? '↗️' : '↙️';
+  const getTipoIcon = (tipo: 'aporte' | 'retirada'): JSX.Element => {
+    return tipo === 'aporte' ? 
+      <FontAwesomeIcon icon={faArrowTrendUp} className="movimentacao-icon aporte-icon" /> : 
+      <FontAwesomeIcon icon={faArrowTrendDown} className="movimentacao-icon retirada-icon" />;
   };
 
   const getTipoClass = (tipo: 'aporte' | 'retirada'): string => {
@@ -148,13 +158,13 @@ const Extrato: React.FC<ExtratoProps> = ({ investimento, onBack, onAddAporte, on
           className="btn btn-primary action-btn"
           onClick={onAddAporte}
         >
-          ➕ Novo Aporte
+          <FontAwesomeIcon icon={faPlus} className="btn-icon" /> Novo Aporte
         </button>
         <button 
           className="btn btn-secondary action-btn"
           onClick={onAddRetirada}
         >
-          ➖ Nova Retirada
+          <FontAwesomeIcon icon={faMinus} className="btn-icon" /> Nova Retirada
         </button>
       </div>
 
@@ -190,7 +200,7 @@ const Extrato: React.FC<ExtratoProps> = ({ investimento, onBack, onAddAporte, on
                   className="btn btn-danger btn-sm"
                   title={`Excluir ${movimentacao.tipo}`}
                 >
-                  🗑️
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
             </div>

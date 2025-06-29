@@ -8,6 +8,7 @@ import { dbConfig } from './models/database';
 import categoriasRoutes from './routes/categorias';
 import investimentosRoutes from './routes/investimentos';
 import aportesRoutes from './routes/aportes';
+import retiradasRoutes from './routes/retiradas';
 
 dotenv.config();
 
@@ -71,6 +72,7 @@ app.get('/api/test-db', async (req, res) => {
 app.use('/api/categorias', categoriasRoutes);
 app.use('/api/investimentos', investimentosRoutes);
 app.use('/api/aportes', aportesRoutes);
+app.use('/api/retiradas', retiradasRoutes);
 
 // Inicialização do servidor
 app.listen(PORT, () => {

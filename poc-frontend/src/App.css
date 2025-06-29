@@ -894,6 +894,25 @@ body {
   font-weight: bold;
 }
 
+/* ==================== ÍCONES FONTAWESOME ==================== */
+.movimentacao-icon {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.aporte-icon {
+  color: #4ade80;
+}
+
+.retirada-icon {
+  color: #f87171;
+}
+
+.btn-icon {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
 /* ==================== RESPONSIVIDADE DO EXTRATO ==================== */
 @media (max-width: 768px) {
   .extrato-header {

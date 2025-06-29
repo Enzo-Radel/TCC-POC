@@ -62,10 +62,14 @@ const RetiradaForm: React.FC<RetiradaFormProps> = ({ investimento, retirada, onS
       const data: ApiResponse<any> = await response.json();
       
       if (data.success && data.data) {
-        setSaldoDisponivel(data.data.saldoAtual);
+        setSaldoDisponivel(data.data.saldoAtual || 0);
+      } else {
+        console.error('Erro na resposta da API:', data.message);
+        setSaldoDisponivel(0);
       }
     } catch (error) {
       console.error('Erro ao buscar saldo disponível:', error);
+      setSaldoDisponivel(0);
     } finally {
       setLoadingSaldo(false);
     }
