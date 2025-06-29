@@ -9,7 +9,7 @@ const InvestimentosList: React.FC<InvestimentosListProps> = ({
 }) => {
   const [investimentos, setInvestimentos] = useState<InvestimentoCompleto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [filter, setFilter] = useState<string>('');
+  const [aportesData, setAportesData] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
     fetchInvestimentos();
@@ -22,12 +22,40 @@ const InvestimentosList: React.FC<InvestimentosListProps> = ({
       
       if (data.success && data.data) {
         setInvestimentos(data.data);
+        // Buscar aportes para cada investimento
+        fetchAportesData(data.data);
       }
     } catch (error) {
       console.error('Erro ao carregar investimentos:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchAportesData = async (investimentosList: InvestimentoCompleto[]): Promise<void> => {
+    const aportesMap: { [key: number]: number } = {};
+    
+    for (const investimento of investimentosList) {
+      try {
+        const response = await fetch(`http://localhost:3001/api/aportes?investimento_id=${investimento.id}`);
+        const data = await response.json();
+        
+        if (data.success && data.data && Array.isArray(data.data)) {
+          const total = data.data.reduce((sum: number, aporte: any) => {
+            const valor = parseFloat(aporte.valor);
+            return sum + (isNaN(valor) ? 0 : valor);
+          }, 0);
+          aportesMap[investimento.id] = total;
+        } else {
+          aportesMap[investimento.id] = 0;
+        }
+      } catch (error) {
+        console.error(`Erro ao carregar aportes do investimento ${investimento.id}:`, error);
+        aportesMap[investimento.id] = 0;
+      }
+    }
+    
+    setAportesData(aportesMap);
   };
 
   const handleDelete = async (id: number): Promise<void> => {
@@ -60,18 +88,16 @@ const InvestimentosList: React.FC<InvestimentosListProps> = ({
     }
   };
 
-  const formatTaxaJuros = (investimento: InvestimentoCompleto): string => {
-    const { tipo_taxa_juros, rentabilidade, indices, porcentagem_do_indice } = investimento;
-    
-    switch (tipo_taxa_juros) {
-      case 'porcentagem':
-        return `${rentabilidade}% a.a.`;
-      case 'indice':
-        return `${porcentagem_do_indice}% do ${indices}`;
-      case 'mista':
-        return `${rentabilidade}% + ${porcentagem_do_indice}% do ${indices}`;
-      default:
-        return 'N/A';
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  };
+
+  const handleCardClick = (investimento: InvestimentoCompleto) => {
+    if (onViewAportes) {
+      onViewAportes(investimento);
     }
   };
 
@@ -105,46 +131,45 @@ const InvestimentosList: React.FC<InvestimentosListProps> = ({
 
           {/* Cards dos investimentos existentes */}
           {investimentos.map(investimento => (
-            <div key={investimento.id} className="investment-card">
+            <div 
+              key={investimento.id} 
+              className="investment-card clickable-card" 
+              onClick={() => handleCardClick(investimento)}
+              title="Ver aportes"
+            >
               <div className="card-content">
                 <h3 className="investment-title">{investimento.titulo}</h3>
                 <div className="investment-info">
                   <div className="info-item">
-                    <span className="label">Categoria:</span>
-                    <span className="value">{investimento.categoria_nome}</span>
+                    <span className="label">Valor aportado:</span>
+                    <span className="value">{formatCurrency(aportesData[investimento.id] || 0)}</span>
                   </div>
                   <div className="info-item">
                     <span className="label">Vencimento:</span>
                     <span className="value">{formatDate(investimento.data_vencimento)}</span>
-                  </div>
-                  <div className="info-item">
-                    <span className="label">Rentabilidade:</span>
-                    <span className="value">{formatTaxaJuros(investimento)}</span>
                   </div>
                 </div>
               </div>
 
               <div className="card-actions">
                 <button 
-                  onClick={() => onEdit(investimento)} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEdit(investimento);
+                  }} 
                   className="btn-card btn-details"
                 >
                   Editar
                 </button>
                 <button 
-                  onClick={() => onAddAporte(investimento)} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAddAporte(investimento);
+                  }} 
                   className="btn-card btn-invest"
                 >
                   Aportar
                 </button>
-                {onViewAportes && (
-                  <button 
-                    onClick={() => onViewAportes(investimento)} 
-                    className="btn-card btn-details"
-                  >
-                    Ver Aportes
-                  </button>
-                )}
               </div>
             </div>
           ))}

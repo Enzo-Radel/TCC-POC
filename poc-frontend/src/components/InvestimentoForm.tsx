@@ -273,10 +273,10 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
         {renderTaxaFields()}
 
         <div className="form-actions">
-          <button type="button" onClick={onCancel} className="btn-secondary">
+          <button type="button" onClick={onCancel} className="btn btn-secondary">
             Cancelar
           </button>
-          <button type="submit" disabled={loading} className="btn-primary">
+          <button type="submit" disabled={loading} className="btn btn-primary">
             {loading ? 'Salvando...' : (isEditing ? 'Atualizar' : 'Criar')}
           </button>
         </div>

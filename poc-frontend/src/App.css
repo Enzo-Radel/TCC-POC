@@ -22,18 +22,7 @@ body {
   margin: 0 auto;
 }
 
-.header {
-  text-align: left;
-  margin-bottom: 2rem;
-  color: #e0e0e0;
-}
-
-.header h1 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
-  font-weight: 400;
-  color: #ffffff;
-}
+/* Header removido conforme solicitado pelo usuário */
 
 /* Main Content */
 .main-content {
@@ -109,6 +98,23 @@ body {
   font-size: 1rem;
 }
 
+/* Cards clicáveis */
+.clickable-card {
+  cursor: pointer;
+}
+
+.clickable-card:hover {
+  cursor: pointer;
+}
+
+.clickable-card .card-actions {
+  pointer-events: none;
+}
+
+.clickable-card .card-actions .btn-card {
+  pointer-events: all;
+}
+
 .card-actions {
   display: flex;
   gap: 0.75rem;
@@ -150,25 +156,28 @@ body {
 /* Card Novo Investimento */
 .new-investment-card {
   cursor: pointer;
-  border: 2px dashed #4a4a4a !important;
-  background: #333333 !important;
+  border: 2px dashed #4a4a4a;
+  background: #333333;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 200px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
 .new-investment-card:hover {
-  border-color: #ffd700 !important;
-  background: rgba(255, 215, 0, 0.05) !important;
-  transform: translateY(-5px) !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.05);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
 }
 
 .new-investment-content {
   text-align: center;
   color: #a0a0a0;
+  transition: all 0.3s ease;
 }
 
 .new-investment-card:hover .new-investment-content {
@@ -179,7 +188,7 @@ body {
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .new-investment-card:hover .plus-icon {
@@ -193,6 +202,7 @@ body {
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  transition: all 0.3s ease;
 }
 
 .no-investments-message {
@@ -225,24 +235,28 @@ body {
 
 /* Formulários */
 .form-container {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 650px;
+  margin: 2rem auto;
   background: #333333;
-  border-radius: 12px;
-  padding: 2rem;
+  border-radius: 16px;
+  padding: 2.5rem;
   border: 1px solid #4a4a4a;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .form-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #3a3a3a;
 }
 
 .form-header h2 {
   color: #ffffff;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  margin: 0;
+  font-size: 1.6rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .investment-info {
@@ -269,41 +283,48 @@ body {
 .aporte-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: #e0e0e0;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .form-group input,
-.form-group select {
-  padding: 0.75rem;
+.form-group select,
+.form-group textarea {
+  padding: 1rem;
   border: 1px solid #4a4a4a;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
   background: #2a2a2a;
   color: #ffffff;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: #ffd700;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
 }
 
 .form-group input.error,
-.form-group select.error {
+.form-group select.error,
+.form-group textarea.error {
   border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
 }
 
 .error-message {
@@ -321,9 +342,11 @@ body {
 
 .taxa-fields {
   background: #2a2a2a;
-  padding: 1rem;
-  border-radius: 8px;
+  padding: 1.5rem;
+  border-radius: 12px;
   border: 1px solid #4a4a4a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  margin-top: 0.5rem;
 }
 
 .aporte-summary {
@@ -355,25 +378,28 @@ body {
 
 .form-actions {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: flex-end;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #3a3a3a;
 }
 
 /* Buttons */
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn:disabled {
@@ -382,25 +408,29 @@ body {
 }
 
 .btn-primary {
-  background: #ffd700;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
   color: #1a1a1a;
+  border: 1px solid #ffd700;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #ffed4e;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #ffed4e, #fff89e);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.3);
 }
 
 .btn-secondary {
   background: transparent;
-  color: #a0a0a0;
-  border: 1px solid #4a4a4a;
+  color: #e0e0e0;
+  border: 2px solid #4a4a4a;
 }
 
 .btn-secondary:hover:not(:disabled) {
   background: #4a4a4a;
   color: #ffffff;
-  transform: translateY(-1px);
+  border-color: #6a6a6a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 74, 74, 0.3);
 }
 
 .btn-danger {
@@ -536,6 +566,19 @@ body {
   font-weight: 400;
 }
 
+.aporte-observacoes {
+  color: #b0b0b0;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.aporte-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
 .no-aportes {
   text-align: center;
   padding: 3rem 2rem;
@@ -548,10 +591,6 @@ body {
 @media (max-width: 768px) {
   .app {
     padding: 10px;
-  }
-  
-  .header h1 {
-    font-size: 1.5rem;
   }
   
   .investments-grid {

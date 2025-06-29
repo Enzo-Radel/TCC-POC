@@ -94,11 +94,6 @@ function App(): JSX.Element {
   return (
     <div className="app">
       <div className="container">
-        {/* Header */}
-        <header className="header">
-          <h1>Seus investimentos - Renda Fixa</h1>
-        </header>
-
         {/* Main Content */}
         <main className="main-content">
           {renderCurrentView()}
