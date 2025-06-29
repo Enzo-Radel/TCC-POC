@@ -8,9 +8,35 @@ const AporteForm = ({ investimento, onSuccess, onCancel }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const formatValueInput = (value) => {
+    // Remove tudo que não é número
+    let numericValue = value.replace(/[^\d]/g, '');
+    
+    // Se estiver vazio, retorna vazio
+    if (!numericValue) return '';
+    
+    // Converte para número e divide por 100 para ter 2 casas decimais
+    const numValue = parseInt(numericValue, 10) / 100;
+    
+    // Formata com 2 casas decimais usando vírgula
+    return numValue.toFixed(2).replace('.', ',');
+  };
+
+  const getNumericValue = (formattedValue) => {
+    // Converte valor formatado (com vírgula) para número
+    return parseFloat(formattedValue.replace(',', '.')) || 0;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    if (name === 'valor') {
+      // Aplica a máscara de valor monetário
+      const formattedValue = formatValueInput(value);
+      setFormData(prev => ({ ...prev, [name]: formattedValue }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
     
     // Limpar erros quando o usuário começar a digitar
     if (errors[name]) {
@@ -21,7 +47,8 @@ const AporteForm = ({ investimento, onSuccess, onCancel }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.valor || parseFloat(formData.valor) <= 0) {
+    const valorNumerico = getNumericValue(formData.valor);
+    if (!formData.valor || valorNumerico <= 0) {
       newErrors.valor = 'Valor deve ser maior que zero';
     }
 
@@ -49,7 +76,8 @@ const AporteForm = ({ investimento, onSuccess, onCancel }) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          ...formData,
+          valor: getNumericValue(formData.valor),
+          data_aporte: formData.data_aporte,
           investimento_id: investimento.id
         })
       });
@@ -96,19 +124,17 @@ const AporteForm = ({ investimento, onSuccess, onCancel }) => {
         <div className="form-group">
           <label>Valor do Aporte (R$)*</label>
           <input
-            type="number"
+            type="text"
             name="valor"
             value={formData.valor}
             onChange={handleChange}
-            step="0.01"
-            min="0.01"
             placeholder="0,00"
             className={errors.valor ? 'error' : ''}
           />
           {errors.valor && <span className="error-message">{errors.valor}</span>}
-          {formData.valor && parseFloat(formData.valor) > 0 && (
+          {formData.valor && getNumericValue(formData.valor) > 0 && (
             <span className="helper-text">
-              Valor: {formatCurrency(parseFloat(formData.valor))}
+              Valor: {formatCurrency(getNumericValue(formData.valor))}
             </span>
           )}
         </div>
@@ -137,14 +163,14 @@ const AporteForm = ({ investimento, onSuccess, onCancel }) => {
           </div>
           <div className="summary-item">
             <span>Novo aporte:</span>
-            <span>{formData.valor ? formatCurrency(parseFloat(formData.valor)) : 'R$ 0,00'}</span>
+            <span>{formData.valor ? formatCurrency(getNumericValue(formData.valor)) : 'R$ 0,00'}</span>
           </div>
           <div className="summary-item total">
             <span>Total após aporte:</span>
             <span>
               {formatCurrency(
                 (parseFloat(investimento.total_aportado) || 0) + 
-                (parseFloat(formData.valor) || 0)
+                getNumericValue(formData.valor)
               )}
             </span>
           </div>
