@@ -6,11 +6,30 @@ const AportesList: React.FC<AportesListProps> = ({ investimento, onBack }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [total, setTotal] = useState<number>(0);
 
+  // Função para calcular total de forma segura
+  const calcularTotalSeguro = (listaAportes: AporteCompleto[]): number => {
+    if (!Array.isArray(listaAportes) || listaAportes.length === 0) {
+      return 0;
+    }
+    
+    return listaAportes.reduce((sum, aporte) => {
+      const valor = typeof aporte.valor === 'number' ? aporte.valor : parseFloat(String(aporte.valor));
+      const validValue = isNaN(valor) ? 0 : valor;
+      return sum + validValue;
+    }, 0);
+  };
+
   useEffect(() => {
     if (investimento) {
       fetchAportes();
     }
   }, [investimento]);
+
+  // Recalcular total sempre que aportes mudarem
+  useEffect(() => {
+    const novoTotal = calcularTotalSeguro(aportes);
+    setTotal(novoTotal);
+  }, [aportes]);
 
   const fetchAportes = async (): Promise<void> => {
     if (!investimento) return;
@@ -19,15 +38,15 @@ const AportesList: React.FC<AportesListProps> = ({ investimento, onBack }) => {
       const response = await fetch(`http://localhost:3001/api/aportes?investimento_id=${investimento.id}`);
       const data: ApiResponse<AporteCompleto[]> = await response.json();
       
-      if (data.success && data.data) {
+      if (data.success && data.data && Array.isArray(data.data)) {
         setAportes(data.data);
-        
-        // Calcular total
-        const totalAportes = data.data.reduce((sum, aporte) => sum + aporte.valor, 0);
-        setTotal(totalAportes);
+      } else {
+        console.log('Dados inválidos ou vazios:', data);
+        setAportes([]);
       }
     } catch (error) {
       console.error('Erro ao carregar aportes:', error);
+      setAportes([]);
     } finally {
       setLoading(false);
     }
@@ -63,11 +82,20 @@ const AportesList: React.FC<AportesListProps> = ({ investimento, onBack }) => {
     }
   };
 
-  const formatCurrency = (value: number): string => {
+  const formatCurrency = (value: number | string): string => {
+    let safeValue: number;
+    
+    if (typeof value === 'number') {
+      safeValue = isNaN(value) ? 0 : value;
+    } else {
+      safeValue = parseFloat(String(value));
+      safeValue = isNaN(safeValue) ? 0 : safeValue;
+    }
+    
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
-    }).format(value);
+    }).format(safeValue);
   };
 
   if (loading) {
