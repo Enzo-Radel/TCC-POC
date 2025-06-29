@@ -5,6 +5,7 @@ import './App.css';
 import InvestimentoForm from './components/InvestimentoForm';
 import AporteForm from './components/AporteForm';
 import InvestimentosList from './components/InvestimentosList';
+import AportesList from './components/AportesList';
 
 function App() {
   const [currentView, setCurrentView] = useState('investimentos');
@@ -20,9 +21,14 @@ function App() {
     setCurrentView('add-aporte');
   };
 
+  const handleViewAportes = (investimento) => {
+    setSelectedInvestimento(investimento);
+    setCurrentView('view-aportes');
+  };
+
   const handleViewChange = (view) => {
     setCurrentView(view);
-    if (view !== 'edit-investimento' && view !== 'add-aporte') {
+    if (view !== 'edit-investimento' && view !== 'add-aporte' && view !== 'view-aportes') {
       setSelectedInvestimento(null);
     }
   };
@@ -35,6 +41,7 @@ function App() {
             onEdit={handleEditInvestimento}
             onAddAporte={handleAddAporte}
             onAddNew={() => handleViewChange('add-investimento')}
+            onViewAportes={handleViewAportes}
           />
         );
       case 'add-investimento':
@@ -60,6 +67,15 @@ function App() {
             onCancel={() => handleViewChange('investimentos')}
           />
         );
+      
+      case 'view-aportes':
+        return (
+          <AportesList 
+            investimento={selectedInvestimento}
+            onBack={() => handleViewChange('investimentos')}
+          />
+        );
+      
       default:
         return (
           <InvestimentosList 

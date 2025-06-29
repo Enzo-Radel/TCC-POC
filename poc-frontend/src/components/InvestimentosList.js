@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const InvestimentosList = ({ onEdit, onAddAporte, onAddNew }) => {
+const InvestimentosList = ({ onEdit, onAddAporte, onAddNew, onViewAportes }) => {
   const [investimentos, setInvestimentos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('');
@@ -102,7 +102,11 @@ const InvestimentosList = ({ onEdit, onAddAporte, onAddNew }) => {
 
         {/* Cards dos Investimentos Existentes */}
         {filteredInvestimentos.map(investimento => (
-          <div key={investimento.id} className="investment-card">
+          <div 
+            key={investimento.id} 
+            className="investment-card clickable-card"
+            onClick={() => onViewAportes(investimento)}
+          >
             <div className="card-content">
               <h3 className="investment-title">{investimento.titulo}</h3>
               <div className="investment-info">
@@ -120,13 +124,19 @@ const InvestimentosList = ({ onEdit, onAddAporte, onAddNew }) => {
             <div className="card-actions">
               <button 
                 className="btn-card btn-details"
-                onClick={() => onEdit(investimento)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(investimento);
+                }}
               >
                 Editar
               </button>
               <button 
                 className="btn-card btn-invest"
-                onClick={() => onAddAporte(investimento)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddAporte(investimento);
+                }}
               >
                 Investir
               </button>

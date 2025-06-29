@@ -414,6 +414,137 @@ body {
 }
 
 /* Responsividade */
+/* Card clicável */
+.clickable-card {
+  cursor: pointer;
+  position: relative;
+}
+
+/* Aportes List */
+.aportes-list {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.aportes-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #4a4a4a;
+}
+
+.back-btn {
+  padding: 10px 16px;
+  background: #444444;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.back-btn:hover {
+  background: #555555;
+  transform: translateY(-1px);
+}
+
+.investment-summary {
+  flex: 1;
+}
+
+.investment-summary h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat .label {
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat .value {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.stat .total-value {
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Grade de Aportes */
+.aportes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.aporte-card {
+  background: #333333;
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 1px solid #4a4a4a;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.aporte-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  border-color: #5a5a5a;
+}
+
+.aporte-content {
+  text-align: center;
+}
+
+.aporte-value {
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.aporte-date {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.no-aportes {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #a0a0a0;
+  background: #333333;
+  border-radius: 12px;
+  border: 1px solid #4a4a4a;
+}
+
 @media (max-width: 768px) {
   .app {
     padding: 10px;
@@ -458,6 +589,21 @@ body {
   
   .form-actions .btn {
     width: 100%;
+  }
+
+  /* Aportes responsivo */
+  .aportes-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .summary-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .aportes-grid {
+    grid-template-columns: 1fr;
   }
 }
 
