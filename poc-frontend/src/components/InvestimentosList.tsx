@@ -3,9 +3,8 @@ import { InvestimentosListProps, InvestimentoCompleto, ApiResponse } from '../ty
 
 const InvestimentosList: React.FC<InvestimentosListProps> = ({ 
   onEdit, 
-  onAddAporte, 
   onAddNew, 
-  onViewAportes 
+  onViewExtrato 
 }) => {
   const [investimentos, setInvestimentos] = useState<InvestimentoCompleto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -96,8 +95,8 @@ const InvestimentosList: React.FC<InvestimentosListProps> = ({
   };
 
   const handleCardClick = (investimento: InvestimentoCompleto) => {
-    if (onViewAportes) {
-      onViewAportes(investimento);
+    if (onViewExtrato) {
+      onViewExtrato(investimento);
     }
   };
 
@@ -135,7 +134,7 @@ const InvestimentosList: React.FC<InvestimentosListProps> = ({
               key={investimento.id} 
               className="investment-card clickable-card" 
               onClick={() => handleCardClick(investimento)}
-              title="Ver aportes"
+              title="Ver extrato (aportes e retiradas)"
             >
               <div className="card-content">
                 <h3 className="investment-title">{investimento.titulo}</h3>
@@ -160,15 +159,6 @@ const InvestimentosList: React.FC<InvestimentosListProps> = ({
                   className="btn-card btn-details"
                 >
                   Editar
-                </button>
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onAddAporte(investimento);
-                  }} 
-                  className="btn-card btn-invest"
-                >
-                  Aportar
                 </button>
               </div>
             </div>

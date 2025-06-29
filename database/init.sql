@@ -32,11 +32,26 @@ CREATE TABLE IF NOT EXISTS aportes (
     investimento_id INT NOT NULL,
     valor DECIMAL(12,2) NOT NULL,
     data_aporte DATE NOT NULL DEFAULT (CURDATE()),
+    observacoes TEXT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (investimento_id) REFERENCES investimentos(id) ON DELETE CASCADE,
     INDEX idx_investimento (investimento_id),
     INDEX idx_data_aporte (data_aporte)
+);
+
+-- Tabela de retiradas
+CREATE TABLE IF NOT EXISTS retiradas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    investimento_id INT NOT NULL,
+    valor DECIMAL(12,2) NOT NULL,
+    data_retirada DATE NOT NULL DEFAULT (CURDATE()),
+    observacoes TEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (investimento_id) REFERENCES investimentos(id) ON DELETE CASCADE,
+    INDEX idx_investimento (investimento_id),
+    INDEX idx_data_retirada (data_retirada)
 );
 
 -- Inserindo categorias de exemplo
@@ -55,12 +70,17 @@ INSERT INTO investimentos (titulo, data_vencimento, tipo_taxa_juros, rentabilida
     ('LCI Santander', '2026-06-30', 'porcentagem', 9.5000, NULL, NULL, 3);
 
 -- Inserindo aportes de exemplo
-INSERT INTO aportes (investimento_id, valor, data_aporte) VALUES 
-    (1, 1000.00, '2024-01-15'),
-    (1, 500.00, '2024-02-15'),
-    (2, 2000.00, '2024-01-20'),
-    (3, 1500.00, '2024-01-25'),
-    (4, 3000.00, '2024-02-01');
+INSERT INTO aportes (investimento_id, valor, data_aporte, observacoes) VALUES 
+    (1, 1000.00, '2024-01-15', 'Primeiro aporte no Tesouro Selic'),
+    (1, 500.00, '2024-02-15', 'Segundo aporte'),
+    (2, 2000.00, '2024-01-20', 'Aporte inicial CDB'),
+    (3, 1500.00, '2024-01-25', 'Investimento IPCA+'),
+    (4, 3000.00, '2024-02-01', 'Aporte LCI');
+
+-- Inserindo retiradas de exemplo
+INSERT INTO retiradas (investimento_id, valor, data_retirada, observacoes) VALUES 
+    (1, 200.00, '2024-03-10', 'Retirada parcial para emergência'),
+    (2, 500.00, '2024-02-28', 'Rebalanceamento de carteira');
 
 -- View para investimentos com informações completas
 CREATE VIEW investimentos_completos AS
@@ -75,12 +95,16 @@ SELECT
     c.nome as categoria_nome,
     c.id as categoria_id,
     COALESCE(SUM(a.valor), 0) as total_aportado,
-    COUNT(a.id) as total_aportes,
+    COALESCE(SUM(r.valor), 0) as total_retirado,
+    (COALESCE(SUM(a.valor), 0) - COALESCE(SUM(r.valor), 0)) as saldo_atual,
+    COUNT(DISTINCT a.id) as total_aportes,
+    COUNT(DISTINCT r.id) as total_retiradas,
     i.created_at,
     i.updated_at
 FROM investimentos i
 LEFT JOIN categorias c ON i.categoria_id = c.id
 LEFT JOIN aportes a ON i.id = a.investimento_id
+LEFT JOIN retiradas r ON i.id = r.investimento_id
 GROUP BY i.id, i.titulo, i.data_vencimento, i.tipo_taxa_juros, i.rentabilidade, 
          i.indices, i.porcentagem_do_indice, c.nome, c.id, i.created_at, i.updated_at
 ORDER BY i.created_at DESC; 

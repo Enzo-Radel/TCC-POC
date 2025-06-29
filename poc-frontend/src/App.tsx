@@ -7,8 +7,9 @@ import { ViewType, InvestimentoCompleto } from './types';
 // Componentes
 import InvestimentoForm from './components/InvestimentoForm';
 import AporteForm from './components/AporteForm';
+import RetiradaForm from './components/RetiradaForm';
 import InvestimentosList from './components/InvestimentosList';
-import AportesList from './components/AportesList';
+import Extrato from './components/Extrato';
 
 function App(): JSX.Element {
   const [currentView, setCurrentView] = useState<ViewType>('investimentos');
@@ -24,14 +25,19 @@ function App(): JSX.Element {
     setCurrentView('add-aporte');
   };
 
-  const handleViewAportes = (investimento: InvestimentoCompleto): void => {
+  const handleAddRetirada = (investimento: InvestimentoCompleto): void => {
     setSelectedInvestimento(investimento);
-    setCurrentView('view-aportes');
+    setCurrentView('add-retirada');
+  };
+
+  const handleViewExtrato = (investimento: InvestimentoCompleto): void => {
+    setSelectedInvestimento(investimento);
+    setCurrentView('extrato');
   };
 
   const handleViewChange = (view: ViewType): void => {
     setCurrentView(view);
-    if (view !== 'edit-investimento' && view !== 'add-aporte' && view !== 'view-aportes') {
+    if (view !== 'edit-investimento' && view !== 'add-aporte' && view !== 'add-retirada' && view !== 'extrato') {
       setSelectedInvestimento(null);
     }
   };
@@ -42,9 +48,8 @@ function App(): JSX.Element {
         return (
           <InvestimentosList 
             onEdit={handleEditInvestimento}
-            onAddAporte={handleAddAporte}
             onAddNew={() => handleViewChange('add-investimento')}
-            onViewAportes={handleViewAportes}
+            onViewExtrato={handleViewExtrato}
           />
         );
       case 'add-investimento':
@@ -66,16 +71,25 @@ function App(): JSX.Element {
         return (
           <AporteForm 
             investimento={selectedInvestimento || undefined}
-            onSuccess={() => handleViewChange('investimentos')}
-            onCancel={() => handleViewChange('investimentos')}
+            onSuccess={() => handleViewChange('extrato')}
+            onCancel={() => handleViewChange('extrato')}
           />
         );
-      
-      case 'view-aportes':
+      case 'add-retirada':
         return (
-          <AportesList 
+          <RetiradaForm 
+            investimento={selectedInvestimento || undefined}
+            onSuccess={() => handleViewChange('extrato')}
+            onCancel={() => handleViewChange('extrato')}
+          />
+        );
+      case 'extrato':
+        return (
+          <Extrato 
             investimento={selectedInvestimento || undefined}
             onBack={() => handleViewChange('investimentos')}
+            onAddAporte={() => handleViewChange('add-aporte')}
+            onAddRetirada={() => handleViewChange('add-retirada')}
           />
         );
       
@@ -83,9 +97,8 @@ function App(): JSX.Element {
         return (
           <InvestimentosList 
             onEdit={handleEditInvestimento}
-            onAddAporte={handleAddAporte}
             onAddNew={() => handleViewChange('add-investimento')}
-            onViewAportes={handleViewAportes}
+            onViewExtrato={handleViewExtrato}
           />
         );
     }

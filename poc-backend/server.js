@@ -72,11 +72,13 @@ app.get('/api/test-db', async (req, res) => {
 const categoriasRoutes = require('./routes/categorias');
 const investimentosRoutes = require('./routes/investimentos');
 const aportesRoutes = require('./routes/aportes');
+const retiradasRoutes = require('./routes/retiradas');
 
 // Usando as rotas
 app.use('/api/categorias', categoriasRoutes);
 app.use('/api/investimentos', investimentosRoutes);
 app.use('/api/aportes', aportesRoutes);
+app.use('/api/retiradas', retiradasRoutes);
 
 // Inicialização do servidor
 app.listen(PORT, () => {

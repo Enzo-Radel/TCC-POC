@@ -40,6 +40,21 @@ export interface AporteCompleto extends Aporte {
   investimento_categoria?: string;
 }
 
+export interface Retirada {
+  id: number;
+  investimento_id: number;
+  valor: number;
+  data_retirada: string;
+  observacoes?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface RetiradaCompleta extends Retirada {
+  investimento_titulo: string;
+  investimento_categoria?: string;
+}
+
 // DTOs para formulários
 export interface InvestimentoFormData {
   titulo: string;
@@ -63,6 +78,23 @@ export interface CategoriaFormData {
   descricao?: string;
 }
 
+export interface RetiradaFormData {
+  investimento_id: number;
+  valor: string;
+  data_retirada: string;
+  observacoes?: string;
+}
+
+// Tipo para movimentações do extrato (aportes + retiradas)
+export interface Movimentacao {
+  id: number;
+  tipo: 'aporte' | 'retirada';
+  valor: number;
+  data: string;
+  observacoes?: string;
+  investimento_id: number;
+}
+
 // Tipos para respostas da API
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -80,9 +112,8 @@ export interface InvestimentoFormProps {
 
 export interface InvestimentosListProps {
   onEdit: (investimento: InvestimentoCompleto) => void;
-  onAddAporte: (investimento: InvestimentoCompleto) => void;
   onAddNew: () => void;
-  onViewAportes?: (investimento: InvestimentoCompleto) => void;
+  onViewExtrato?: (investimento: InvestimentoCompleto) => void;
 }
 
 export interface AporteFormProps {
@@ -95,6 +126,26 @@ export interface AporteFormProps {
 export interface AportesListProps {
   investimento?: InvestimentoCompleto;
   onBack?: () => void;
+}
+
+export interface RetiradaFormProps {
+  investimento?: InvestimentoCompleto;
+  retirada?: RetiradaCompleta;
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+export interface ExtratoProps {
+  investimento?: InvestimentoCompleto;
+  onBack?: () => void;
+  onAddAporte?: () => void;
+  onAddRetirada?: () => void;
+}
+
+export interface MovimentacoesListProps {
+  movimentacoes: Movimentacao[];
+  onEdit?: (movimentacao: Movimentacao) => void;
+  onDelete?: (movimentacao: Movimentacao) => void;
 }
 
 // Tipos para validação de formulários
@@ -112,7 +163,10 @@ export type ViewType =
   | 'add-investimento' 
   | 'edit-investimento' 
   | 'add-aporte' 
-  | 'view-aportes';
+  | 'add-retirada'
+  | 'edit-aporte'
+  | 'edit-retirada'
+  | 'extrato';
 
 // Tipo para opções de select
 export interface SelectOption {

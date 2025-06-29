@@ -53,11 +53,12 @@ class Aporte {
     const connection = await getConnection();
     try {
       const [result] = await connection.execute(
-        'INSERT INTO aportes (investimento_id, valor, data_aporte) VALUES (?, ?, ?)',
+        'INSERT INTO aportes (investimento_id, valor, data_aporte, observacoes) VALUES (?, ?, ?, ?)',
         [
           data.investimento_id,
           data.valor,
-          data.data_aporte || new Date().toISOString().split('T')[0]
+          data.data_aporte || new Date().toISOString().split('T')[0],
+          data.observacoes || null
         ]
       );
       return { id: result.insertId, ...data };
@@ -70,8 +71,8 @@ class Aporte {
     const connection = await getConnection();
     try {
       const [result] = await connection.execute(
-        'UPDATE aportes SET investimento_id = ?, valor = ?, data_aporte = ? WHERE id = ?',
-        [data.investimento_id, data.valor, data.data_aporte, id]
+        'UPDATE aportes SET investimento_id = ?, valor = ?, data_aporte = ?, observacoes = ? WHERE id = ?',
+        [data.investimento_id, data.valor, data.data_aporte, data.observacoes || null, id]
       );
       return result.affectedRows > 0;
     } finally {

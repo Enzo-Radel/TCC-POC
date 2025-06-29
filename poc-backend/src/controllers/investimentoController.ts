@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { InvestimentoModel } from '../models/Investimento';
+import { AporteModel } from '../models/Aporte';
+import { RetiradaModel } from '../models/Retirada';
 import { 
   ApiResponse, 
   InvestimentoCompleto, 
@@ -230,6 +232,102 @@ export class InvestimentoController {
       });
     } catch (error) {
       console.error('Erro ao deletar investimento:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Erro interno do servidor',
+        error: error instanceof Error ? error.message : 'Erro desconhecido'
+      });
+    }
+  }
+
+  // GET /api/investimentos/:id/extrato
+  static async getExtrato(req: Request<RouteParams>, res: Response<ApiResponse>): Promise<void> {
+    try {
+      const { id } = req.params;
+      const investimentoId = parseInt(id, 10);
+      
+      // Verificar se o investimento existe
+      const investimento = await InvestimentoModel.findById(investimentoId);
+      if (!investimento) {
+        res.status(404).json({
+          success: false,
+          message: 'Investimento não encontrado'
+        });
+        return;
+      }
+
+      // Buscar aportes
+      const aportes = await AporteModel.findByInvestimento(investimentoId);
+      
+      // Buscar retiradas
+      const retiradas = await RetiradaModel.findByInvestimento(investimentoId);
+
+      // Combinar aportes e retiradas em um formato unificado
+      const movimentacoes: any[] = [];
+
+      // Adicionar aportes
+      if (aportes && aportes.length > 0) {
+        aportes.forEach(aporte => {
+          movimentacoes.push({
+            id: aporte.id,
+            tipo: 'aporte',
+            valor: parseFloat(String(aporte.valor)) || 0,
+            data: aporte.data_aporte,
+            observacoes: aporte.observacoes,
+            created_at: aporte.created_at,
+            updated_at: aporte.updated_at
+          });
+        });
+      }
+
+      // Adicionar retiradas
+      if (retiradas && retiradas.length > 0) {
+        retiradas.forEach(retirada => {
+          movimentacoes.push({
+            id: retirada.id,
+            tipo: 'retirada',
+            valor: parseFloat(String(retirada.valor)) || 0,
+            data: retirada.data_retirada,
+            observacoes: retirada.observacoes,
+            created_at: retirada.created_at,
+            updated_at: retirada.updated_at
+          });
+        });
+      }
+
+      // Ordenar por data (mais recente primeiro)
+      movimentacoes.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
+
+      // Calcular totais
+      const totalAportes = movimentacoes
+        .filter(m => m.tipo === 'aporte')
+        .reduce((sum, m) => sum + (isNaN(m.valor) ? 0 : m.valor), 0);
+
+      const totalRetiradas = movimentacoes
+        .filter(m => m.tipo === 'retirada')
+        .reduce((sum, m) => sum + (isNaN(m.valor) ? 0 : m.valor), 0);
+
+      const saldoAtual = totalAportes - totalRetiradas;
+
+      res.json({
+        success: true,
+        message: 'Extrato encontrado com sucesso',
+        data: {
+          investimento: {
+            id: investimento.id,
+            titulo: investimento.titulo,
+            categoria_nome: investimento.categoria_nome
+          },
+          movimentacoes,
+          totais: {
+            totalAportes: parseFloat(totalAportes.toFixed(2)),
+            totalRetiradas: parseFloat(totalRetiradas.toFixed(2)),
+            saldoAtual: parseFloat(saldoAtual.toFixed(2))
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Erro ao buscar extrato:', error);
       res.status(500).json({
         success: false,
         message: 'Erro interno do servidor',

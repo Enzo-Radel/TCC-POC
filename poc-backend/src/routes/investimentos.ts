@@ -6,6 +6,9 @@ const router = express.Router();
 // GET /api/investimentos - Listar todos os investimentos
 router.get('/', InvestimentoController.index);
 
+// Nova rota para extrato de movimentações (deve vir ANTES da rota /:id)
+router.get('/:id/extrato', InvestimentoController.getExtrato);
+
 // GET /api/investimentos/:id - Buscar investimento por ID
 router.get('/:id', InvestimentoController.show);
 

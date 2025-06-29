@@ -55,6 +55,23 @@ export interface AporteCompleto extends Aporte {
   investimento_categoria: string;
 }
 
+// Interface para Retirada
+export interface Retirada extends RowDataPacket {
+  id: number;
+  investimento_id: number;
+  valor: number;
+  data_retirada: Date;
+  observacoes?: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// Interface para Retirada com dados do investimento (join)
+export interface RetiradaCompleta extends Retirada {
+  investimento_titulo: string;
+  investimento_categoria: string;
+}
+
 // DTOs para criação/atualização
 export interface CreateCategoriaDto {
   nome: string;
@@ -96,6 +113,19 @@ export interface CreateAporteDto {
 export interface UpdateAporteDto {
   valor?: number;
   data_aporte?: string | Date;
+  observacoes?: string;
+}
+
+export interface CreateRetiradaDto {
+  investimento_id: number;
+  valor: number;
+  data_retirada: string | Date;
+  observacoes?: string;
+}
+
+export interface UpdateRetiradaDto {
+  valor?: number;
+  data_retirada?: string | Date;
   observacoes?: string;
 }
 

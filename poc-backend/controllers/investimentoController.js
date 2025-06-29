@@ -217,6 +217,103 @@ class InvestimentoController {
       });
     }
   }
+
+  // GET /api/investimentos/:id/extrato
+  static async getExtrato(req, res) {
+    try {
+      const { id } = req.params;
+      
+      // Verificar se o investimento existe
+      const investimento = await Investimento.findById(id);
+      if (!investimento) {
+        return res.status(404).json({
+          success: false,
+          message: 'Investimento não encontrado'
+        });
+      }
+
+      // Buscar extrato completo usando query SQL direta
+      const Aporte = require('../models/Aporte');
+      const Retirada = require('../models/Retirada');
+      
+      // Buscar aportes
+      const aportes = await Aporte.findByInvestimento(id);
+      
+      // Buscar retiradas
+      const retiradas = await Retirada.getAll(id);
+
+      // Combinar aportes e retiradas em um formato unificado
+      const movimentacoes = [];
+
+      // Adicionar aportes
+      if (aportes && aportes.length > 0) {
+        aportes.forEach(aporte => {
+          movimentacoes.push({
+            id: aporte.id,
+            tipo: 'aporte',
+            valor: parseFloat(aporte.valor) || 0,
+            data: aporte.data_aporte,
+            observacoes: aporte.observacoes,
+            created_at: aporte.created_at,
+            updated_at: aporte.updated_at
+          });
+        });
+      }
+
+      // Adicionar retiradas
+      if (retiradas && retiradas.length > 0) {
+        retiradas.forEach(retirada => {
+          movimentacoes.push({
+            id: retirada.id,
+            tipo: 'retirada',
+            valor: parseFloat(retirada.valor) || 0,
+            data: retirada.data_retirada,
+            observacoes: retirada.observacoes,
+            created_at: retirada.created_at,
+            updated_at: retirada.updated_at
+          });
+        });
+      }
+
+      // Ordenar por data (mais recente primeiro)
+      movimentacoes.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+      // Calcular totais
+      const totalAportes = movimentacoes
+        .filter(m => m.tipo === 'aporte')
+        .reduce((sum, m) => sum + (isNaN(m.valor) ? 0 : m.valor), 0);
+
+      const totalRetiradas = movimentacoes
+        .filter(m => m.tipo === 'retirada')
+        .reduce((sum, m) => sum + (isNaN(m.valor) ? 0 : m.valor), 0);
+
+      const saldoAtual = totalAportes - totalRetiradas;
+
+      res.json({
+        success: true,
+        data: {
+          investimento: {
+            id: investimento.id,
+            titulo: investimento.titulo,
+            categoria_nome: investimento.categoria_nome
+          },
+          movimentacoes,
+          totais: {
+            totalAportes: parseFloat(totalAportes.toFixed(2)),
+            totalRetiradas: parseFloat(totalRetiradas.toFixed(2)),
+            saldoAtual: parseFloat(saldoAtual.toFixed(2))
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Erro ao buscar extrato:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Erro interno do servidor',
+        error: error.message
+      });
+    }
+  }
 }
 
 module.exports = InvestimentoController; 
