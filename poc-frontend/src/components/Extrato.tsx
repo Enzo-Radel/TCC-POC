@@ -158,13 +158,13 @@ const Extrato: React.FC<ExtratoProps> = ({ investimento, onBack, onAddAporte, on
           className="btn btn-primary action-btn"
           onClick={onAddAporte}
         >
-          <FontAwesomeIcon icon={faPlus} className="btn-icon" /> Novo Aporte
+          <FontAwesomeIcon icon={faPlus} className="btn-icon" /> Aportar
         </button>
         <button 
           className="btn btn-secondary action-btn"
           onClick={onAddRetirada}
         >
-          <FontAwesomeIcon icon={faMinus} className="btn-icon" /> Nova Retirada
+          <FontAwesomeIcon icon={faMinus} className="btn-icon" /> Retirar
         </button>
       </div>
 
@@ -181,9 +181,8 @@ const Extrato: React.FC<ExtratoProps> = ({ investimento, onBack, onAddAporte, on
               <div className="movimentacao-content">
                 <div className="movimentacao-header">
                   <span className="movimentacao-tipo">
-                    {getTipoIcon(movimentacao.tipo)} {movimentacao.tipo === 'aporte' ? 'Aporte' : 'Retirada'}
+                    {getTipoIcon(movimentacao.tipo)} {formatDate(movimentacao.data)}
                   </span>
-                  <span className="movimentacao-data">{formatDate(movimentacao.data)}</span>
                 </div>
                 <div className="movimentacao-valor">
                   {formatCurrency(movimentacao.valor)}
