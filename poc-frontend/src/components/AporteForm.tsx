@@ -31,7 +31,12 @@ const AporteForm: React.FC<AporteFormProps> = ({ investimento, aporte, onSuccess
     if (aporte) {
       setFormData({
         investimento_id: aporte.investimento_id,
-        valor: aporte.valor.toString(),
+        valor: aporte.valor.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }),
         data_aporte: (aporte.data_aporte ? 
           new Date(aporte.data_aporte).toISOString().split('T')[0] : '') as string,
         observacoes: (aporte.observacoes || '') as string
@@ -47,7 +52,29 @@ const AporteForm: React.FC<AporteFormProps> = ({ investimento, aporte, onSuccess
 
   const handleChange = (e: FormChangeEvent): void => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    let formattedValue = value;
+    
+    // Aplicar máscara monetária para o campo valor
+    if (name === 'valor') {
+      // Remove tudo que não é dígito
+      const numericValue = value.replace(/\D/g, '');
+      
+      if (numericValue === '' || numericValue === '0') {
+        formattedValue = '';
+      } else {
+        // Converte para número e formata como moeda brasileira
+        const numValue = parseInt(numericValue) / 100;
+        formattedValue = numValue.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+    }
+    
+    setFormData(prev => ({ ...prev, [name]: formattedValue }));
     
     // Limpar erros quando o usuário começar a digitar
     if (errors[name]) {
@@ -58,7 +85,8 @@ const AporteForm: React.FC<AporteFormProps> = ({ investimento, aporte, onSuccess
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.valor || parseFloat(formData.valor) <= 0) {
+    const valorNumerico = parseFloat(formData.valor.replace(/\D/g, '')) / 100;
+    if (!formData.valor || isNaN(valorNumerico) || valorNumerico <= 0) {
       newErrors.valor = 'Valor é obrigatório e deve ser maior que zero';
     }
 
@@ -93,7 +121,7 @@ const AporteForm: React.FC<AporteFormProps> = ({ investimento, aporte, onSuccess
         },
         body: JSON.stringify({
           ...formData,
-          valor: parseFloat(formData.valor)
+          valor: parseFloat(formData.valor.replace(/\D/g, '')) / 100 || 0
         })
       });
 
@@ -136,14 +164,12 @@ const AporteForm: React.FC<AporteFormProps> = ({ investimento, aporte, onSuccess
         <div className="form-group">
           <label>Valor (R$)*</label>
           <input
-            type="number"
+            type="text"
             name="valor"
             value={formData.valor}
             onChange={handleChange}
-            step="0.01"
-            min="0"
             className={errors.valor ? 'error' : ''}
-            placeholder="Ex: 1000.00"
+            placeholder="Digite o valor (ex: R$ 1.000,00)"
           />
           {errors.valor && <span className="error-message">{errors.valor}</span>}
         </div>

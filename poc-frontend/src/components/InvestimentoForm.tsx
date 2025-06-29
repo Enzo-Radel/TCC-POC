@@ -57,7 +57,28 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
 
   const handleChange = (e: FormChangeEvent): void => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    let formattedValue = value;
+    
+    // Aplicar máscaras específicas
+    if (name === 'rentabilidade' || name === 'porcentagem_do_indice') {
+      // Máscara para percentual - permite apenas números e vírgula/ponto
+      formattedValue = value
+        .replace(/[^\d.,]/g, '') // Remove tudo que não é dígito, vírgula ou ponto
+        .replace(',', '.') // Converte vírgula em ponto
+        .replace(/\.{2,}/g, '.') // Remove pontos duplicados
+        .replace(/(\.\d{2})\d+/g, '$1'); // Limita a 2 casas decimais
+      
+      // Não permite valores negativos (remove sinal negativo se existir)
+      formattedValue = formattedValue.replace(/-/g, '');
+      
+      // Impede que comece com ponto
+      if (formattedValue.startsWith('.')) {
+        formattedValue = formattedValue.substring(1);
+      }
+    }
+    
+    setFormData(prev => ({ ...prev, [name]: formattedValue }));
     
     // Limpar erros quando o usuário começar a digitar
     if (errors[name]) {
@@ -155,13 +176,12 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
           <div className="form-group">
             <label>Rentabilidade (%)*</label>
             <input
-              type="number"
+              type="text"
               name="rentabilidade"
               value={formData.rentabilidade}
               onChange={handleChange}
-              step="0.01"
-              min="0"
               className={errors.rentabilidade ? 'error' : ''}
+              placeholder="Ex: 12,75"
             />
             {errors.rentabilidade && <span className="error-message">{errors.rentabilidade}</span>}
           </div>
@@ -191,13 +211,12 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
             <div className="form-group">
               <label>Porcentagem do Índice (%)*</label>
               <input
-                type="number"
+                type="text"
                 name="porcentagem_do_indice"
                 value={formData.porcentagem_do_indice}
                 onChange={handleChange}
-                step="0.01"
-                min="0"
                 className={errors.porcentagem_do_indice ? 'error' : ''}
+                placeholder="Ex: 100"
               />
               {errors.porcentagem_do_indice && <span className="error-message">{errors.porcentagem_do_indice}</span>}
             </div>
