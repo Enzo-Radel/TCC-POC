@@ -1,0 +1,474 @@
+{
+  "info": {
+    "name": "POC Backend API Collection",
+    "description": "Coleção completa das APIs do backend POC para gerenciamento de investimentos, aportes e retiradas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "poc-backend-collection-2024"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health"]
+            }
+          }
+        },
+        {
+          "name": "Test Database Connection",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/test-db",
+              "host": ["{{base_url}}"],
+              "path": ["api", "test-db"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categorias",
+      "item": [
+        {
+          "name": "Listar Todas as Categorias",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categorias",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Categoria por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categorias/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Criar Nova Categoria",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Renda Fixa\",\n  \"descricao\": \"Investimentos de renda fixa como CDB, LCI, LCA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/categorias",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Categoria",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Renda Fixa Atualizada\",\n  \"descricao\": \"Investimentos de renda fixa - descrição atualizada\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/categorias/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Remover Categoria",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categorias/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "categorias", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Investimentos",
+      "item": [
+        {
+          "name": "Listar Todos os Investimentos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/investimentos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "investimentos"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Investimento por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/investimentos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "investimentos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Extrato do Investimento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/investimentos/1/extrato",
+              "host": ["{{base_url}}"],
+              "path": ["api", "investimentos", "1", "extrato"]
+            }
+          }
+        },
+        {
+          "name": "Criar Novo Investimento - Porcentagem",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"CDB Banco XYZ\",\n  \"data_vencimento\": \"2025-12-31\",\n  \"tipo_taxa_juros\": \"porcentagem\",\n  \"rentabilidade\": 12.5,\n  \"categoria_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/investimentos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "investimentos"]
+            }
+          }
+        },
+        {
+          "name": "Criar Novo Investimento - Índice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"LCI Atrelada ao CDI\",\n  \"data_vencimento\": \"2026-06-30\",\n  \"tipo_taxa_juros\": \"indice\",\n  \"indices\": \"CDI\",\n  \"porcentagem_do_indice\": 98.5,\n  \"categoria_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/investimentos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "investimentos"]
+            }
+          }
+        },
+        {
+          "name": "Criar Novo Investimento - Mista",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Debênture Híbrida\",\n  \"data_vencimento\": \"2027-03-15\",\n  \"tipo_taxa_juros\": \"mista\",\n  \"rentabilidade\": 5.0,\n  \"indices\": \"IPCA\",\n  \"porcentagem_do_indice\": 100.0,\n  \"categoria_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/investimentos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "investimentos"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Investimento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"CDB Banco XYZ - Atualizado\",\n  \"data_vencimento\": \"2025-12-31\",\n  \"tipo_taxa_juros\": \"porcentagem\",\n  \"rentabilidade\": 13.0,\n  \"categoria_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/investimentos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "investimentos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Remover Investimento",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/investimentos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "investimentos", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Aportes",
+      "item": [
+        {
+          "name": "Listar Todos os Aportes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/aportes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "aportes"]
+            }
+          }
+        },
+        {
+          "name": "Listar Aportes por Investimento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/aportes?investimento_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "aportes"],
+              "query": [
+                {
+                  "key": "investimento_id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Aporte por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/aportes/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "aportes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Total de Aportes por Investimento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/aportes/total/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "aportes", "total", "1"]
+            }
+          }
+        },
+        {
+          "name": "Criar Novo Aporte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"investimento_id\": 1,\n  \"valor\": 1000.00,\n  \"data_aporte\": \"2024-01-15\",\n  \"observacoes\": \"Primeiro aporte no investimento\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/aportes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "aportes"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Aporte",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valor\": 1200.00,\n  \"data_aporte\": \"2024-01-15\",\n  \"observacoes\": \"Aporte atualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/aportes/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "aportes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Remover Aporte",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/aportes/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "aportes", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Retiradas",
+      "item": [
+        {
+          "name": "Listar Todas as Retiradas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/retiradas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "retiradas"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Retirada por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/retiradas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "retiradas", "1"]
+            }
+          }
+        },
+        {
+          "name": "Saldo Disponível para Retirada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/retiradas/investimento/1/saldo",
+              "host": ["{{base_url}}"],
+              "path": ["api", "retiradas", "investimento", "1", "saldo"]
+            }
+          }
+        },
+        {
+          "name": "Criar Nova Retirada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"investimento_id\": 1,\n  \"valor\": 500.00,\n  \"data_retirada\": \"2024-06-15\",\n  \"observacoes\": \"Retirada parcial para emergência\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/retiradas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "retiradas"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Retirada",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valor\": 600.00,\n  \"data_retirada\": \"2024-06-15\",\n  \"observacoes\": \"Retirada atualizada\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/retiradas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "retiradas", "1"]
+            }
+          }
+        },
+        {
+          "name": "Remover Retirada",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/retiradas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "retiradas", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3001",
+      "type": "string"
+    }
+  ]
+} 
