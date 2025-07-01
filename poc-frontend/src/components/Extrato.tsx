@@ -116,87 +116,90 @@ const Extrato: React.FC<ExtratoProps> = ({ investimento, onBack, onAddAporte, on
 
   const getTipoIcon = (tipo: 'aporte' | 'retirada'): JSX.Element => {
     return tipo === 'aporte' ? 
-      <FontAwesomeIcon icon={faArrowTrendUp} className="movimentacao-icon aporte-icon" /> : 
-      <FontAwesomeIcon icon={faArrowTrendDown} className="movimentacao-icon retirada-icon" />;
+      <FontAwesomeIcon icon={faArrowTrendUp} className="mr-2 text-base text-accent-success" /> : 
+      <FontAwesomeIcon icon={faArrowTrendDown} className="mr-2 text-base text-accent-danger" />;
   };
 
   const getTipoClass = (tipo: 'aporte' | 'retirada'): string => {
-    return tipo === 'aporte' ? 'movimentacao-aporte' : 'movimentacao-retirada';
+    return tipo === 'aporte' ? 'border-l-accent-success' : 'border-l-accent-danger';
   };
 
   if (loading) {
-    return <div className="loading">Carregando extrato...</div>;
+    return <div className="text-center py-16 px-8 text-text-muted">Carregando extrato...</div>;
   }
 
   return (
-    <div className="extrato">
-      <div className="extrato-header">
-        <button onClick={onBack} className="back-btn">
+    <div className="max-w-6xl mx-auto p-4">
+      <div className="flex items-center justify-between mb-8 pb-4 border-b border-border-primary">
+        <button 
+          onClick={onBack} 
+          className="py-2 px-4 bg-gradient-to-r from-gray-600 to-gray-700 text-white border-none rounded-lg cursor-pointer text-base transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.2)] hover:bg-gradient-to-r hover:from-gray-700 hover:to-gray-800 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)] hover:-translate-y-0.5"
+        >
           ← Voltar
         </button>
-        <div className="investment-summary">
-          <h2>{investimento?.titulo}</h2>
-          <div className="summary-stats">
-            <div className="stat">
-              <div className="label">Total Aportado:</div>
-              <div className="value aporte-value">{formatCurrency(totais.totalAportes)}</div>
+        <div className="flex-1 ml-8">
+          <h2 className="text-white mb-4 text-2xl">{investimento?.titulo}</h2>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+            <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+              <div className="text-gray-300 text-sm mb-2">Total Aportado:</div>
+              <div className="text-xl font-bold text-accent-success">{formatCurrency(totais.totalAportes)}</div>
             </div>
-            <div className="stat">
-              <div className="label">Total Retirado:</div>
-              <div className="value retirada-value">{formatCurrency(totais.totalRetiradas)}</div>
+            <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+              <div className="text-gray-300 text-sm mb-2">Total Retirado:</div>
+              <div className="text-xl font-bold text-accent-danger">{formatCurrency(totais.totalRetiradas)}</div>
             </div>
-            <div className="stat">
-              <div className="label">Saldo Atual:</div>
-              <div className="value saldo-value">{formatCurrency(totais.saldoAtual)}</div>
+            <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+              <div className="text-gray-300 text-sm mb-2">Saldo Atual:</div>
+              <div className="text-xl font-bold text-accent-info">{formatCurrency(totais.saldoAtual)}</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="extrato-actions">
+      <div className="flex gap-4 mb-8 justify-center">
         <button 
-          className="btn btn-primary action-btn"
+          className="py-3 px-6 rounded-lg text-base font-semibold cursor-pointer transition-all duration-300 border-none shadow-[0_2px_4px_rgba(0,0,0,0.2)] bg-gradient-to-r from-accent-gold to-yellow-300 text-app-bg border border-accent-gold hover:bg-gradient-to-r hover:from-yellow-300 hover:to-yellow-200 hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]"
           onClick={onAddAporte}
         >
-          <FontAwesomeIcon icon={faPlus} className="btn-icon" /> Aportar
+          <FontAwesomeIcon icon={faPlus} className="mr-2 text-sm" /> Aportar
         </button>
         <button 
-          className="btn btn-secondary action-btn"
+          className="py-3 px-6 rounded-lg text-base font-semibold cursor-pointer transition-all duration-300 border-none shadow-[0_2px_4px_rgba(0,0,0,0.2)] bg-transparent text-text-secondary border-2 border-border-primary hover:bg-border-primary hover:text-text-primary hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(74,74,74,0.3)]"
           onClick={onAddRetirada}
         >
-          <FontAwesomeIcon icon={faMinus} className="btn-icon" /> Retirar
+          <FontAwesomeIcon icon={faMinus} className="mr-2 text-sm" /> Retirar
         </button>
       </div>
 
       {movimentacoes.length === 0 ? (
-        <div className="no-movimentacoes">
-          <p>Nenhuma movimentação encontrada para este investimento.</p>
+        <div className="text-center text-text-muted py-12 bg-app-card rounded-xl border border-border-primary">
+          <p className="mb-4 text-lg">Nenhuma movimentação encontrada para este investimento.</p>
           <p>Comece registrando um aporte!</p>
         </div>
       ) : (
-        <div className="movimentacoes-list">
-          <h3>Extrato de Movimentações</h3>
+        <div className="bg-app-card rounded-xl border border-border-primary p-6">
+          <h3 className="text-white mb-6 text-xl">Extrato de Movimentações</h3>
           {movimentacoes.map(movimentacao => (
-            <div key={`${movimentacao.tipo}-${movimentacao.id}`} className={`movimentacao-item ${getTipoClass(movimentacao.tipo)}`}>
-              <div className="movimentacao-content">
-                <div className="movimentacao-header">
-                  <span className="movimentacao-tipo">
+            <div key={`${movimentacao.tipo}-${movimentacao.id}`} className={`flex justify-between items-center p-4 mb-4 rounded-lg bg-white/5 border-l-4 transition-all duration-300 hover:bg-white/8 hover:translate-x-1 ${getTipoClass(movimentacao.tipo)}`}>
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-bold text-white text-base">
                     {getTipoIcon(movimentacao.tipo)} {formatDate(movimentacao.data)}
                   </span>
                 </div>
-                <div className="movimentacao-valor">
+                <div className="text-xl font-bold text-white">
                   {formatCurrency(movimentacao.valor)}
                 </div>
                 {movimentacao.observacoes && (
-                  <div className="movimentacao-observacoes">
+                  <div className="text-gray-400 text-sm mt-2 italic">
                     {movimentacao.observacoes}
                   </div>
                 )}
               </div>
-              <div className="movimentacao-actions">
+              <div className="flex gap-2">
                 <button 
                   onClick={() => handleDelete(movimentacao)} 
-                  className="btn btn-danger btn-sm"
+                  className="py-1 px-2 text-sm rounded border-none cursor-pointer transition-all duration-300 bg-gradient-to-r from-red-600 to-red-700 text-white hover:bg-gradient-to-r hover:from-red-700 hover:to-red-800 hover:-translate-y-0.5"
                   title={`Excluir ${movimentacao.tipo}`}
                 >
                   <FontAwesomeIcon icon={faTrash} />

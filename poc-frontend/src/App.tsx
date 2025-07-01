@@ -105,10 +105,10 @@ function App(): JSX.Element {
   };
 
   return (
-    <div className="app">
-      <div className="container">
+    <div className="min-h-screen bg-app-bg p-5">
+      <div className="max-w-6xl mx-auto">
         {/* Main Content */}
-        <main className="main-content">
+        <main className="rounded-2xl p-8 mb-8">
           {renderCurrentView()}
         </main>
       </div>

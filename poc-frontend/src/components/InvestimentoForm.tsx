@@ -170,33 +170,33 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
     const { tipo_taxa_juros } = formData;
 
     return (
-      <div className="taxa-fields">
+      <div className="bg-app-input p-6 rounded-xl border border-border-primary shadow-[0_2px_8px_rgba(0,0,0,0.2)] mt-2">
         {/* Rentabilidade (para porcentagem e mista) */}
         {(tipo_taxa_juros === 'porcentagem' || tipo_taxa_juros === 'mista') && (
-          <div className="form-group">
-            <label>Rentabilidade (%)*</label>
+          <div className="flex flex-col mb-6">
+            <label className="mb-3 text-text-secondary font-medium text-sm">Rentabilidade (%)*</label>
             <input
               type="text"
               name="rentabilidade"
               value={formData.rentabilidade}
               onChange={handleChange}
-              className={errors.rentabilidade ? 'error' : ''}
+              className={`p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] font-mono tracking-wide bg-gradient-to-br from-app-input to-app-input-dark placeholder:text-text-placeholder placeholder:italic focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] ${errors.rentabilidade ? 'border-accent-error shadow-[0_0_0_3px_rgba(255,107,107,0.1)]' : ''}`}
               placeholder="Ex: 12,75"
             />
-            {errors.rentabilidade && <span className="error-message">{errors.rentabilidade}</span>}
+            {errors.rentabilidade && <span className="text-accent-error text-xs mt-1">{errors.rentabilidade}</span>}
           </div>
         )}
 
         {/* Índice (para índice e mista) */}
         {(tipo_taxa_juros === 'indice' || tipo_taxa_juros === 'mista') && (
           <>
-            <div className="form-group">
-              <label>Índice*</label>
+            <div className="flex flex-col mb-6">
+              <label className="mb-3 text-text-secondary font-medium text-sm">Índice*</label>
               <select
                 name="indices"
                 value={formData.indices}
                 onChange={handleChange}
-                className={errors.indices ? 'error' : ''}
+                className={`p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] ${errors.indices ? 'border-accent-error shadow-[0_0_0_3px_rgba(255,107,107,0.1)]' : ''}`}
               >
                 <option value="">Selecione um índice</option>
                 <option value="CDI">CDI</option>
@@ -205,20 +205,20 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
                 <option value="IGPM">IGPM</option>
                 <option value="TJLP">TJLP</option>
               </select>
-              {errors.indices && <span className="error-message">{errors.indices}</span>}
+              {errors.indices && <span className="text-accent-error text-xs mt-1">{errors.indices}</span>}
             </div>
 
-            <div className="form-group">
-              <label>Porcentagem do Índice (%)*</label>
+            <div className="flex flex-col mb-6">
+              <label className="mb-3 text-text-secondary font-medium text-sm">Porcentagem do Índice (%)*</label>
               <input
                 type="text"
                 name="porcentagem_do_indice"
                 value={formData.porcentagem_do_indice}
                 onChange={handleChange}
-                className={errors.porcentagem_do_indice ? 'error' : ''}
+                className={`p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] font-mono tracking-wide bg-gradient-to-br from-app-input to-app-input-dark placeholder:text-text-placeholder placeholder:italic focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] ${errors.porcentagem_do_indice ? 'border-accent-error shadow-[0_0_0_3px_rgba(255,107,107,0.1)]' : ''}`}
                 placeholder="Ex: 100"
               />
-              {errors.porcentagem_do_indice && <span className="error-message">{errors.porcentagem_do_indice}</span>}
+              {errors.porcentagem_do_indice && <span className="text-accent-error text-xs mt-1">{errors.porcentagem_do_indice}</span>}
             </div>
           </>
         )}
@@ -227,44 +227,44 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
   };
 
   return (
-    <div className="form-container">
-      <div className="form-header">
-        <h2>{isEditing ? 'Editar Investimento' : 'Novo Investimento'}</h2>
+    <div className="max-w-[650px] my-8 mx-auto bg-app-card rounded-2xl p-10 border border-border-primary shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+      <div className="mb-10 pb-4 border-b border-border-light">
+        <h2 className="text-text-primary m-0 text-2xl font-semibold uppercase tracking-wide">{isEditing ? 'Editar Investimento' : 'Novo Investimento'}</h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="investimento-form">
-        <div className="form-group">
-          <label>Título*</label>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+        <div className="flex flex-col mb-6">
+          <label className="mb-3 text-text-secondary font-medium text-sm">Título*</label>
           <input
             type="text"
             name="titulo"
             value={formData.titulo}
             onChange={handleChange}
-            className={errors.titulo ? 'error' : ''}
+            className={`p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] ${errors.titulo ? 'border-accent-error shadow-[0_0_0_3px_rgba(255,107,107,0.1)]' : ''}`}
             placeholder="Ex: CDB XYZ Bank"
           />
-          {errors.titulo && <span className="error-message">{errors.titulo}</span>}
+          {errors.titulo && <span className="text-accent-error text-xs mt-1">{errors.titulo}</span>}
         </div>
 
-        <div className="form-group">
-          <label>Data de Vencimento*</label>
+        <div className="flex flex-col mb-6">
+          <label className="mb-3 text-text-secondary font-medium text-sm">Data de Vencimento*</label>
           <input
             type="date"
             name="data_vencimento"
             value={formData.data_vencimento}
             onChange={handleChange}
-            className={errors.data_vencimento ? 'error' : ''}
+            className={`p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] ${errors.data_vencimento ? 'border-accent-error shadow-[0_0_0_3px_rgba(255,107,107,0.1)]' : ''}`}
           />
-          {errors.data_vencimento && <span className="error-message">{errors.data_vencimento}</span>}
+          {errors.data_vencimento && <span className="text-accent-error text-xs mt-1">{errors.data_vencimento}</span>}
         </div>
 
-        <div className="form-group">
-          <label>Categoria*</label>
+        <div className="flex flex-col mb-6">
+          <label className="mb-3 text-text-secondary font-medium text-sm">Categoria*</label>
           <select
             name="categoria_id"
             value={formData.categoria_id}
             onChange={handleChange}
-            className={errors.categoria_id ? 'error' : ''}
+            className={`p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] ${errors.categoria_id ? 'border-accent-error shadow-[0_0_0_3px_rgba(255,107,107,0.1)]' : ''}`}
           >
             <option value="">Selecione uma categoria</option>
             {categorias.map(categoria => (
@@ -273,15 +273,16 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
               </option>
             ))}
           </select>
-          {errors.categoria_id && <span className="error-message">{errors.categoria_id}</span>}
+          {errors.categoria_id && <span className="text-accent-error text-xs mt-1">{errors.categoria_id}</span>}
         </div>
 
-        <div className="form-group">
-          <label>Tipo de Taxa de Juros*</label>
+        <div className="flex flex-col mb-6">
+          <label className="mb-3 text-text-secondary font-medium text-sm">Tipo de Taxa de Juros*</label>
           <select
             name="tipo_taxa_juros"
             value={formData.tipo_taxa_juros}
             onChange={handleChange}
+            className="p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)]"
           >
             <option value="porcentagem">Porcentagem Fixa</option>
             <option value="indice">Vinculado a Índice</option>
@@ -291,11 +292,19 @@ const InvestimentoForm: React.FC<InvestimentoFormProps> = ({ investimento, onSuc
 
         {renderTaxaFields()}
 
-        <div className="form-actions">
-          <button type="button" onClick={onCancel} className="btn btn-secondary">
+        <div className="flex gap-6 justify-end mt-8 pt-6 border-t border-border-light">
+          <button 
+            type="button" 
+            onClick={onCancel} 
+            className="py-4 px-8 border-none rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 inline-flex items-center justify-center gap-2 shadow-[0_4px_8px_rgba(0,0,0,0.2)] bg-transparent text-text-secondary border-2 border-border-primary hover:bg-border-primary hover:text-text-primary hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(74,74,74,0.3)]"
+          >
             Cancelar
           </button>
-          <button type="submit" disabled={loading} className="btn btn-primary">
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="py-4 px-8 border-none rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 inline-flex items-center justify-center gap-2 shadow-[0_4px_8px_rgba(0,0,0,0.2)] bg-gradient-to-r from-accent-gold to-yellow-300 text-app-bg border border-accent-gold disabled:opacity-60 disabled:cursor-not-allowed hover:bg-gradient-to-r hover:from-yellow-300 hover:to-yellow-200 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(255,215,0,0.3)]"
+          >
             {loading ? 'Salvando...' : (isEditing ? 'Atualizar' : 'Criar')}
           </button>
         </div>

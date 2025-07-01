@@ -176,64 +176,74 @@ const RetiradaForm: React.FC<RetiradaFormProps> = ({ investimento, retirada, onS
   };
 
   return (
-    <div className="form-container">
-      <div className="form-header">
-        <h2>{isEditing ? 'Editar Retirada' : 'Nova Retirada'}</h2>
+    <div className="max-w-[650px] my-8 mx-auto bg-app-card rounded-2xl p-10 border border-border-primary shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+      <div className="mb-10 pb-4 border-b border-border-light">
+        <h2 className="text-text-primary m-0 text-2xl font-semibold uppercase tracking-wide">{isEditing ? 'Editar Retirada' : 'Nova Retirada'}</h2>
         {investimento && (
-          <p className="investimento-info">
-            <strong>Investimento:</strong> {investimento.titulo}
+          <p className="bg-app-input p-4 rounded-lg border-l-4 border-accent-gold mb-4 mt-4">
+            <strong className="text-accent-gold text-lg block mb-2">Investimento:</strong>
+            <span className="text-text-secondary text-sm">{investimento.titulo}</span>
           </p>
         )}
         {!loadingSaldo && (
-          <div className="saldo-info">
-            <strong>Saldo disponível: </strong>
-            <span className="saldo-value">{formatCurrency(saldoDisponivel)}</span>
+          <div className="bg-accent-info/10 border border-accent-info/30 rounded-lg p-4 mb-4 mt-4 text-center">
+            <strong className="text-text-secondary">Saldo disponível: </strong>
+            <span className="text-accent-info text-lg font-bold">{formatCurrency(saldoDisponivel)}</span>
           </div>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="aporte-form">
-        <div className="form-group">
-          <label>Valor (R$)*</label>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+        <div className="flex flex-col mb-6">
+          <label className="mb-3 text-text-secondary font-medium text-sm">Valor (R$)*</label>
           <input
             type="text"
             name="valor"
             value={formData.valor}
             onChange={handleChange}
-            className={errors.valor ? 'error' : ''}
+            className={`p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] font-mono tracking-wide bg-gradient-to-br from-app-input to-app-input-dark placeholder:text-text-placeholder placeholder:italic focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] ${errors.valor ? 'border-accent-error shadow-[0_0_0_3px_rgba(255,107,107,0.1)]' : ''}`}
             placeholder="Digite o valor (ex: R$ 1.000,00)"
           />
-          {errors.valor && <span className="error-message">{errors.valor}</span>}
+          {errors.valor && <span className="text-accent-error text-xs mt-1">{errors.valor}</span>}
         </div>
 
-        <div className="form-group">
-          <label>Data da Retirada*</label>
+        <div className="flex flex-col mb-6">
+          <label className="mb-3 text-text-secondary font-medium text-sm">Data da Retirada*</label>
           <input
             type="date"
             name="data_retirada"
             value={formData.data_retirada}
             onChange={handleChange}
-            className={errors.data_retirada ? 'error' : ''}
+            className={`p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] ${errors.data_retirada ? 'border-accent-error shadow-[0_0_0_3px_rgba(255,107,107,0.1)]' : ''}`}
           />
-          {errors.data_retirada && <span className="error-message">{errors.data_retirada}</span>}
+          {errors.data_retirada && <span className="text-accent-error text-xs mt-1">{errors.data_retirada}</span>}
         </div>
 
-        <div className="form-group">
-          <label>Observações</label>
+        <div className="flex flex-col mb-6">
+          <label className="mb-3 text-text-secondary font-medium text-sm">Observações</label>
           <textarea
             name="observacoes"
             value={formData.observacoes}
             onChange={(e) => handleChange(e as FormChangeEvent)}
             rows={3}
+            className="p-4 border border-border-primary rounded-xl text-sm bg-app-input text-text-primary transition-all duration-300 shadow-[0_2px_4px_rgba(0,0,0,0.1)] focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_3px_rgba(255,215,0,0.1)] resize-none"
             placeholder="Observações sobre esta retirada (opcional)"
           />
         </div>
 
-        <div className="form-actions">
-          <button type="button" onClick={onCancel} className="btn btn-secondary">
+        <div className="flex gap-6 justify-end mt-8 pt-6 border-t border-border-light">
+          <button 
+            type="button" 
+            onClick={onCancel} 
+            className="py-4 px-8 border-none rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 inline-flex items-center justify-center gap-2 shadow-[0_4px_8px_rgba(0,0,0,0.2)] bg-transparent text-text-secondary border-2 border-border-primary hover:bg-border-primary hover:text-text-primary hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(74,74,74,0.3)]"
+          >
             Cancelar
           </button>
-          <button type="submit" disabled={loading} className="btn btn-primary">
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="py-4 px-8 border-none rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 inline-flex items-center justify-center gap-2 shadow-[0_4px_8px_rgba(0,0,0,0.2)] bg-gradient-to-r from-accent-gold to-yellow-300 text-app-bg border border-accent-gold disabled:opacity-60 disabled:cursor-not-allowed hover:bg-gradient-to-r hover:from-yellow-300 hover:to-yellow-200 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(255,215,0,0.3)]"
+          >
             {loading ? 'Salvando...' : (isEditing ? 'Atualizar' : 'Registrar Retirada')}
           </button>
         </div>
